@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a080d" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="19 Tahun Kita" />
   <title>19 Tahun Bersama — Mohd Fazleen & Nor Affedah</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -158,9 +162,9 @@
       border: 0;
     }
 
-    /* Fallback Banner for local file:// or embed restriction */
+    /* Fallback bar only shown when opened from local file:// */
     .yt-fallback-bar {
-      display: flex;
+      display: none;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
@@ -186,26 +190,40 @@
       white-space: nowrap;
     }
 
-    .yt-fallback-bar a:hover {
-      background: #b91c1c;
-    }
-
     .now-playing-info {
       padding: 18px 20px;
     }
 
+    .track-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
     .track-tag {
-      font-size: 0.75rem;
+      font-size: 0.76rem;
       font-weight: 700;
       color: var(--gold);
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 4px;
+    }
+
+    .track-counter-badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      background: rgba(234, 179, 8, 0.14);
+      border: 1px solid var(--border-gold);
+      padding: 3px 10px;
+      border-radius: 999px;
     }
 
     .track-title {
       font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       color: #fff;
       margin-bottom: 8px;
     }
@@ -264,6 +282,12 @@
       border-color: var(--gold);
     }
 
+    .btn-secondary.active-toggle {
+      background: rgba(234, 179, 8, 0.22);
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
     .btn-gold {
       background: linear-gradient(135deg, #f59e0b, #d97706);
       color: #0a080d;
@@ -286,6 +310,15 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .section-sub {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      font-weight: 500;
     }
 
     .playlist-grid {
@@ -386,6 +419,13 @@
       margin: 0 auto 18px;
     }
 
+    .letter-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
     .toast {
       position: fixed;
       bottom: 20px;
@@ -400,6 +440,8 @@
       transition: transform 0.3s ease;
       z-index: 1000;
       font-size: 0.88rem;
+      text-align: center;
+      max-width: 90vw;
     }
 
     .toast.show {
@@ -450,8 +492,8 @@
 
     <!-- Main Video Player -->
     <section class="player-card" id="player-section">
-      <div class="yt-fallback-bar">
-        <span>Jika video disekat oleh pelayar fail tempatan, buka terus di YouTube:</span>
+      <div class="yt-fallback-bar" id="local-fallback-bar">
+        <span>Mod fail tempatan dikesan. Jika disekat, buka terus di YouTube:</span>
         <a id="direct-yt-link" href="https://youtu.be/b3BQMqR5Ad4" target="_blank" rel="noopener noreferrer">▶ Buka di YouTube</a>
       </div>
 
@@ -460,7 +502,10 @@
       </div>
 
       <div class="now-playing-info">
-        <div class="track-tag" id="track-tag">Pembuka Tirai • Teaser</div>
+        <div class="track-meta-row">
+          <div class="track-tag" id="track-tag">Pembuka Tirai • Teaser</div>
+          <div class="track-counter-badge" id="track-counter">1 / 9</div>
+        </div>
         <h2 class="track-title" id="track-title">Intro Lagu² Ulangtahun Perkahwinan ke-19</h2>
         <p class="track-note" id="track-note">
           Bingkisan istimewa pembuka tirai meraikan 19 tahun perjalanan suka dan duka kita bersama sejak 19 Oktober 2007.
@@ -472,8 +517,8 @@
         <div class="controls-row">
           <div class="nav-btns">
             <button class="btn-secondary" onclick="prevTrack()">⏮ Sebelumnya</button>
-            <button class="btn-secondary" onclick="unmuteAndPlay()">🔊 Bunyi / Main</button>
             <button class="btn-secondary" onclick="nextTrack()">Seterusnya ⏭</button>
+            <button class="btn-secondary active-toggle" id="autoplay-btn" onclick="toggleAutoPlayNext()">🔁 Auto-Sambung: ON</button>
           </div>
           <button class="btn-gold" onclick="triggerLoveShower()">✨ Tabur Cinta</button>
         </div>
@@ -482,7 +527,8 @@
 
     <!-- Playlist Grid -->
     <div class="section-heading">
-      <span>Koleksi Video & Lagu (9 Pilihan)</span>
+      <span>Koleksi Video & Lagu Buatmu Kekasih Hati</span>
+      <span class="section-sub">9 Pilihan Istimewa</span>
     </div>
 
     <div class="playlist-grid" id="playlist-grid"></div>
@@ -493,7 +539,10 @@
       <p>
         19 tahun bukan sekadar angka, tetapi saksi setiap pengorbanan, senyuman, air mata, dan doa yang kita lalui bersama membesarkan keluarga kecil kita. Terima kasih kerana sentiasa menjadi rumah tempat berteduh di kala hujan dan panas. Semoga cinta ini kekal mekar hingga ke syurga.
       </p>
-      <button class="btn-gold" onclick="copyLoveMessage()">💌 Salin Ucapan & Kongsi Kenangan</button>
+      <div class="letter-actions">
+        <button class="btn-gold" onclick="shareOrCopy()">💌 Kongsi / Salin Ucapan</button>
+        <button class="btn-secondary" onclick="triggerLoveShower()">🌹 Hantar Kelopak Cinta</button>
+      </div>
     </section>
 
     <footer>
@@ -514,56 +563,56 @@
       },
       {
         id: "adjITh20wu8",
-        tag: "Trek 01 • Lagu Kenangan",
+        tag: "Trek 01 • Lagu Buatmu Kekasih Hati",
         title: "Genggaman Ini",
         note: "Tentang genggaman tangan yang tidak pernah dilepaskan walau diuji air mata dan tawa.",
         lyrics: "“Rambut mulai memutih usia bertambah, tapi cinta kita tak pernah kalah. Tiada harta dunia yang lebih bernilai dari kasih sayang yang tiada bertepi...”"
       },
       {
         id: "tKomkliMzBw",
-        tag: "Trek 02 • Lagu Kenangan",
+        tag: "Trek 02 • Lagu Buatmu Kekasih Hati",
         title: "Kasih Tiada Bertepi",
         note: "Penghargaan tulus buat kesetiaan yang terus utuh meredah ribut dan badai kehidupan.",
         lyrics: "“Bukan mudah jalan yang kita lalui, ada ribut dan badai yang pernah menguji, tapi kerana kasih kita terus setia...”"
       },
       {
         id: "NXeMzrp6on4",
-        tag: "Trek 03 • Lagu Kenangan",
+        tag: "Trek 03 • Lagu Buatmu Kekasih Hati",
         title: "Tarikh Keramat",
         note: "Mengimbau detik 19 Oktober ketika janji setia mula terpatri menjadi satu jiwa.",
         lyrics: "“Hingga akhirnya kau tetap milikku, tetap pilihku. 19 tahun yang sangat bererti, aku cintakanmu selamanya kekasihku...”"
       },
       {
         id: "b6TWvHC1_DE",
-        tag: "Trek 04 • Lagu Kenangan",
+        tag: "Trek 04 • Lagu Buatmu Kekasih Hati",
         title: "Janji Setua Kita",
         note: "Setiap pengorbananmu adalah hadiah paling bermakna sepanjang melayari bahtera rumah tangga.",
         lyrics: "“Kau adalah rumah tempatku berteduh di kala badai melanda hebat. Terima kasih kerana sentiasa ada menyayangi dan memahami diriku...”"
       },
       {
         id: "9FhcPaQeFdo",
-        tag: "Trek 05 • Lagu Kenangan",
+        tag: "Trek 05 • Lagu Buatmu Kekasih Hati",
         title: "Kasih Tiada Bertepi (Versi II)",
         note: "Alunan melodi syukur atas 19 tahun kasih sayang yang semakin matang setiap hari.",
         lyrics: "“19 Oktober kembali lagi menghitung syukur di dalam hati. 19 tahun penuh syukur, hanya kamu selamanya...”"
       },
       {
         id: "usFTUrpZIdc",
-        tag: "Trek 06 • Lagu Kenangan",
+        tag: "Trek 06 • Lagu Buatmu Kekasih Hati",
         title: "Sembilan Belas Oktober",
         note: "Simbol cinta sejati yang melangkah seirama menghapus segala duka.",
         lyrics: "“Cintamu bagai nafas membuat hidupku puas. Kau anugerah terindah cahaya dalam jiwa, tetaplah di sisi hingga ke hujung usia...”"
       },
       {
         id: "SNIZclmtbiM",
-        tag: "Trek 07 • Lagu Kenangan",
+        tag: "Trek 07 • Lagu Buatmu Kekasih Hati",
         title: "Tarikh Keramat Hati",
         note: "Pahit manis perjalanan dijadikan bekal kekuatan untuk terus melangkah berdua.",
         lyrics: "“Mungkin dulu kita bermimpi tentang hari ini, rupanya lebih indah dari apa yang terlukis di hati...”"
       },
       {
         id: "UQ2XiEzkRKI",
-        tag: "Trek 08 • Lagu Kenangan",
+        tag: "Trek 08 • Lagu Buatmu Kekasih Hati",
         title: "Janji Bulan Oktober",
         note: "Doa agar ikatan suci yang digenggam erat ini berkekalan hingga ke syurga.",
         lyrics: "“Ada masa kita diuji dengan ombak rindu yang kuat, namun tanganmu tak pernah lepas. Hingga ke syurga kita tetap berdua selamanya...”"
@@ -573,6 +622,12 @@
     let currentIndex = 0;
     let ytPlayer = null;
     let playerReady = false;
+    let autoPlayNext = true;
+
+    // Show fallback bar ONLY if opened via local file:// or content://
+    if (window.location.protocol !== "https:" && window.location.protocol !== "http:") {
+      document.getElementById("local-fallback-bar").style.display = "flex";
+    }
 
     // Load Official YouTube IFrame Player API
     const tag = document.createElement('script');
@@ -592,6 +647,7 @@
         },
         events: {
           onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
           onError: onPlayerError
         }
       });
@@ -603,15 +659,21 @@
       event.target.setVolume(100);
     }
 
+    function onPlayerStateChange(event) {
+      // Automatically advance to next song when current video finishes (YT.PlayerState.ENDED === 0)
+      if (event.data === 0 && autoPlayNext) {
+        nextTrack();
+      }
+    }
+
     function onPlayerError(event) {
-      // Fallback if YouTube returns Error 150 / 153 (e.g., opened via content:// or file://)
       const wrapper = document.querySelector('.video-wrapper');
       const currentTrack = tracks[currentIndex];
       wrapper.innerHTML = `
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;background:#110d17;">
           <p style="color:#fde047;font-weight:700;margin-bottom:8px;">Sekatan Pemain Tempatan (Kod Ralat ${event.data})</p>
           <p style="color:#cbd5e1;font-size:0.86rem;max-width:420px;margin-bottom:14px;">
-            Pelayar telefon menyekat video benam apabila dibuka terus daripada fail storan tempatan. Ketik butang di bawah untuk menonton dengan audio penuh di aplikasi YouTube.
+            Sila buka melalui pautan GitHub Pages anda atau ketik butang di bawah untuk menonton terus di YouTube.
           </p>
           <a href="https://youtu.be/${currentTrack.id}" target="_blank" rel="noopener noreferrer"
              style="background:#dc2626;color:#fff;text-decoration:none;font-weight:700;padding:10px 18px;border-radius:10px;">
@@ -621,15 +683,12 @@
       `;
     }
 
-    function unmuteAndPlay() {
-      if (ytPlayer && playerReady && typeof ytPlayer.unMute === 'function') {
-        ytPlayer.unMute();
-        ytPlayer.setVolume(100);
-        ytPlayer.playVideo();
-        showToast("Audio dihidupkan & video dimainkan!");
-      } else {
-        window.open("https://youtu.be/" + tracks[currentIndex].id, "_blank");
-      }
+    function toggleAutoPlayNext() {
+      autoPlayNext = !autoPlayNext;
+      const btn = document.getElementById("autoplay-btn");
+      btn.textContent = autoPlayNext ? "🔁 Auto-Sambung: ON" : "🔁 Auto-Sambung: OFF";
+      btn.classList.toggle("active-toggle", autoPlayNext);
+      showToast(autoPlayNext ? "Lagu seterusnya akan dimainkan secara automatik" : "Mod main satu lagu sahaja diaktifkan");
     }
 
     function renderPlaylist() {
@@ -653,6 +712,7 @@
       const track = tracks[index];
 
       document.getElementById("track-tag").textContent = track.tag;
+      document.getElementById("track-counter").textContent = `${index + 1} / ${tracks.length}`;
       document.getElementById("track-title").textContent = track.title;
       document.getElementById("track-note").textContent = track.note;
       document.getElementById("track-lyrics").textContent = track.lyrics;
@@ -669,7 +729,7 @@
         ytPlayer = new YT.Player('yt-api-player', {
           videoId: track.id,
           playerVars: { playsinline: 1, rel: 0, modestbranding: 1, controls: 1, autoplay: autoplay ? 1 : 0 },
-          events: { onReady: onPlayerReady, onError: onPlayerError }
+          events: { onReady: onPlayerReady, onStateChange: onPlayerStateChange, onError: onPlayerError }
         });
       }
 
@@ -730,10 +790,21 @@
       }
     }
 
-    function copyLoveMessage() {
+    function shareOrCopy() {
       const msg = "Selamat Ulang Tahun Perkahwinan ke-19 buat isteriku tercinta, Nor Affedah Binti Johary (19 Oktober 2007 – 2026). Terima kasih untuk setiap doa, kesetiaan, dan kasih sayang selama ini. Semoga cinta kita kekal hingga ke syurga. 💛🌹";
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(msg).then(() => showToast("Ucapan berjaya disalin!"));
+      const pageUrl = window.location.href.startsWith("http") ? window.location.href : "";
+
+      if (navigator.share && pageUrl) {
+        navigator.share({
+          title: "19 Tahun Dalam Dakapan Bahagia",
+          text: msg,
+          url: pageUrl
+        }).catch(() => {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(pageUrl ? `${msg}
+
+Tonton di sini: ${pageUrl}` : msg)
+          .then(() => showToast("Ucapan & pautan berjaya disalin!"));
       } else {
         showToast("Ucapan sedia dikongsi!");
       }

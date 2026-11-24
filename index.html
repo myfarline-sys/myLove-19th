@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>19 Tahun Bersama — Mohd Fazleen & Nor Affedah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #0a080d;
+      --bg-card: rgba(24, 19, 32, 0.88);
+      --gold: #eab308;
+      --gold-light: #fde047;
+      --gold-glow: rgba(234, 179, 8, 0.35);
+      --rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --border-gold: rgba(234, 179, 8, 0.32);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at top, #1e1326 0%, #0a080d 65%);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    #effects-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+    }
+
+    .floating-item {
+      position: absolute;
+      bottom: -40px;
+      font-size: 1.4rem;
+      animation: floatUp linear forwards;
+      opacity: 0.9;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+      15% { opacity: 1; }
+      100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    header {
+      text-align: center;
+      padding: 24px 16px 18px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(234, 179, 8, 0.14);
+      border: 1px solid var(--border-gold);
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.85rem, 5vw, 2.8rem);
+      background: linear-gradient(135deg, #fffbeb 0%, #fde047 50%, #d97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.98rem;
+    }
+
+    .counter-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin: 20px auto 24px;
+      max-width: 680px;
+    }
+
+    .counter-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 14px;
+      padding: 12px 6px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .counter-num {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(1.2rem, 3.8vw, 1.75rem);
+      font-weight: 700;
+      color: var(--gold-light);
+      display: block;
+    }
+
+    .counter-label {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 2px;
+      display: block;
+    }
+
+    .player-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(234, 179, 8, 0.12);
+      margin-bottom: 24px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    .video-wrapper #yt-api-player,
+    .video-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* Fallback Banner for local file:// or embed restriction */
+    .yt-fallback-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(234, 179, 8, 0.12);
+      border-bottom: 1px solid var(--border-gold);
+      padding: 10px 16px;
+      font-size: 0.82rem;
+      color: #fef08a;
+    }
+
+    .yt-fallback-bar a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #dc2626;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .yt-fallback-bar a:hover {
+      background: #b91c1c;
+    }
+
+    .now-playing-info {
+      padding: 18px 20px;
+    }
+
+    .track-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .track-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .track-note {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .lyrics-box {
+      background: rgba(10, 8, 13, 0.65);
+      border-left: 3px solid var(--gold);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      font-style: italic;
+      color: #fef08a;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-main);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 10px 14px;
+      font-size: 0.85rem;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(234, 179, 8, 0.2);
+      border-color: var(--gold);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #0a080d;
+      border: none;
+      padding: 10px 16px;
+      font-size: 0.86rem;
+      box-shadow: 0 4px 15px var(--gold-glow);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: var(--gold-light);
+      margin: 28px 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .playlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 14px;
+    }
+
+    .track-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .track-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-gold);
+    }
+
+    .track-card.active {
+      border: 1.5px solid var(--gold);
+      box-shadow: 0 0 22px var(--gold-glow);
+      background: rgba(38, 28, 16, 0.9);
+    }
+
+    .thumb-box {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      background: #111;
+    }
+
+    .thumb-box img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .play-pill {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(10, 8, 13, 0.85);
+      color: var(--gold-light);
+      border: 1px solid var(--border-gold);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .card-body {
+      padding: 12px 14px;
+    }
+
+    .card-num {
+      font-size: 0.72rem;
+      color: var(--gold);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 2px;
+    }
+
+    .letter-card {
+      margin-top: 32px;
+      background: linear-gradient(145deg, rgba(30, 22, 38, 0.92), rgba(18, 14, 24, 0.95));
+      border: 1px solid var(--border-gold);
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .letter-card h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold-light);
+      font-size: 1.45rem;
+      margin-bottom: 12px;
+    }
+
+    .letter-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      max-width: 660px;
+      margin: 0 auto 18px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--gold);
+      color: #0a080d;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 999px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      font-size: 0.88rem;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 32px;
+      color: rgba(203, 213, 225, 0.55);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="effects-container"></div>
+
+  <div class="container">
+    <header>
+      <div class="badge">19 Oktober 2007 – 19 Oktober 2026</div>
+      <h1>19 Tahun Dalam Dakapan Bahagia</h1>
+      <p class="subtitle">Khas buat isteri tercinta, <strong>Nor Affedah Binti Johary</strong></p>
+
+      <div class="counter-grid" aria-label="Kaunter Masa Perkahwinan">
+        <div class="counter-box">
+          <span class="counter-num" id="years">19</span>
+          <span class="counter-label">Tahun</span>
+        </div>
+        <div class="counter-box">
+          <span class="counter-num" id="days">0</span>
+          <span class="counter-label">Hari</span>
+        </div>
+        <div class="counter-box">
+          <span class="counter-num" id="hours">00</span>
+          <span class="counter-label">Jam</span>
+        </div>
+        <div class="counter-box">
+          <span class="counter-num" id="minutes">00</span>
+          <span class="counter-label">Minit</span>
+        </div>
+        <div class="counter-box">
+          <span class="counter-num" id="seconds">00</span>
+          <span class="counter-label">Saat</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Video Player -->
+    <section class="player-card" id="player-section">
+      <div class="yt-fallback-bar">
+        <span>Jika video disekat oleh pelayar fail tempatan, buka terus di YouTube:</span>
+        <a id="direct-yt-link" href="https://youtu.be/b3BQMqR5Ad4" target="_blank" rel="noopener noreferrer">▶ Buka di YouTube</a>
+      </div>
+
+      <div class="video-wrapper">
+        <div id="yt-api-player"></div>
+      </div>
+
+      <div class="now-playing-info">
+        <div class="track-tag" id="track-tag">Pembuka Tirai • Teaser</div>
+        <h2 class="track-title" id="track-title">Intro Lagu² Ulangtahun Perkahwinan ke-19</h2>
+        <p class="track-note" id="track-note">
+          Bingkisan istimewa pembuka tirai meraikan 19 tahun perjalanan suka dan duka kita bersama sejak 19 Oktober 2007.
+        </p>
+        <div class="lyrics-box" id="track-lyrics">
+          "Terima kasih untuk setia ini, menemani duka dan bahagia hati. 19 tahun bersama kamu, hanya dirimu yang selalu kutuju..."
+        </div>
+
+        <div class="controls-row">
+          <div class="nav-btns">
+            <button class="btn-secondary" onclick="prevTrack()">⏮ Sebelumnya</button>
+            <button class="btn-secondary" onclick="unmuteAndPlay()">🔊 Bunyi / Main</button>
+            <button class="btn-secondary" onclick="nextTrack()">Seterusnya ⏭</button>
+          </div>
+          <button class="btn-gold" onclick="triggerLoveShower()">✨ Tabur Cinta</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Playlist Grid -->
+    <div class="section-heading">
+      <span>Koleksi Video & Lagu (9 Pilihan)</span>
+    </div>
+
+    <div class="playlist-grid" id="playlist-grid"></div>
+
+    <!-- Love Letter -->
+    <section class="letter-card">
+      <h2>Warkah Buat Nor Affedah Binti Johary</h2>
+      <p>
+        19 tahun bukan sekadar angka, tetapi saksi setiap pengorbanan, senyuman, air mata, dan doa yang kita lalui bersama membesarkan keluarga kecil kita. Terima kasih kerana sentiasa menjadi rumah tempat berteduh di kala hujan dan panas. Semoga cinta ini kekal mekar hingga ke syurga.
+      </p>
+      <button class="btn-gold" onclick="copyLoveMessage()">💌 Salin Ucapan & Kongsi Kenangan</button>
+    </section>
+
+    <footer>
+      Created by myfarline AI • Khas untuk Ulang Tahun Perkahwinan Ke-19
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">Ucapan berjaya disalin!</div>
+
+  <script>
+    const tracks = [
+      {
+        id: "b3BQMqR5Ad4",
+        tag: "Pembuka Tirai • Teaser",
+        title: "Intro Lagu² Ulangtahun Perkahwinan ke-19",
+        note: "Bingkisan pembuka tirai meraikan hampir dua dekad perjalanan cinta kita bersama.",
+        lyrics: "“19 Oktober tarikh keramat saksi segalanya, kau dan aku selamanya dalam dakapan bahagia...”"
+      },
+      {
+        id: "adjITh20wu8",
+        tag: "Trek 01 • Lagu Kenangan",
+        title: "Genggaman Ini",
+        note: "Tentang genggaman tangan yang tidak pernah dilepaskan walau diuji air mata dan tawa.",
+        lyrics: "“Rambut mulai memutih usia bertambah, tapi cinta kita tak pernah kalah. Tiada harta dunia yang lebih bernilai dari kasih sayang yang tiada bertepi...”"
+      },
+      {
+        id: "tKomkliMzBw",
+        tag: "Trek 02 • Lagu Kenangan",
+        title: "Kasih Tiada Bertepi",
+        note: "Penghargaan tulus buat kesetiaan yang terus utuh meredah ribut dan badai kehidupan.",
+        lyrics: "“Bukan mudah jalan yang kita lalui, ada ribut dan badai yang pernah menguji, tapi kerana kasih kita terus setia...”"
+      },
+      {
+        id: "NXeMzrp6on4",
+        tag: "Trek 03 • Lagu Kenangan",
+        title: "Tarikh Keramat",
+        note: "Mengimbau detik 19 Oktober ketika janji setia mula terpatri menjadi satu jiwa.",
+        lyrics: "“Hingga akhirnya kau tetap milikku, tetap pilihku. 19 tahun yang sangat bererti, aku cintakanmu selamanya kekasihku...”"
+      },
+      {
+        id: "b6TWvHC1_DE",
+        tag: "Trek 04 • Lagu Kenangan",
+        title: "Janji Setua Kita",
+        note: "Setiap pengorbananmu adalah hadiah paling bermakna sepanjang melayari bahtera rumah tangga.",
+        lyrics: "“Kau adalah rumah tempatku berteduh di kala badai melanda hebat. Terima kasih kerana sentiasa ada menyayangi dan memahami diriku...”"
+      },
+      {
+        id: "9FhcPaQeFdo",
+        tag: "Trek 05 • Lagu Kenangan",
+        title: "Kasih Tiada Bertepi (Versi II)",
+        note: "Alunan melodi syukur atas 19 tahun kasih sayang yang semakin matang setiap hari.",
+        lyrics: "“19 Oktober kembali lagi menghitung syukur di dalam hati. 19 tahun penuh syukur, hanya kamu selamanya...”"
+      },
+      {
+        id: "usFTUrpZIdc",
+        tag: "Trek 06 • Lagu Kenangan",
+        title: "Sembilan Belas Oktober",
+        note: "Simbol cinta sejati yang melangkah seirama menghapus segala duka.",
+        lyrics: "“Cintamu bagai nafas membuat hidupku puas. Kau anugerah terindah cahaya dalam jiwa, tetaplah di sisi hingga ke hujung usia...”"
+      },
+      {
+        id: "SNIZclmtbiM",
+        tag: "Trek 07 • Lagu Kenangan",
+        title: "Tarikh Keramat Hati",
+        note: "Pahit manis perjalanan dijadikan bekal kekuatan untuk terus melangkah berdua.",
+        lyrics: "“Mungkin dulu kita bermimpi tentang hari ini, rupanya lebih indah dari apa yang terlukis di hati...”"
+      },
+      {
+        id: "UQ2XiEzkRKI",
+        tag: "Trek 08 • Lagu Kenangan",
+        title: "Janji Bulan Oktober",
+        note: "Doa agar ikatan suci yang digenggam erat ini berkekalan hingga ke syurga.",
+        lyrics: "“Ada masa kita diuji dengan ombak rindu yang kuat, namun tanganmu tak pernah lepas. Hingga ke syurga kita tetap berdua selamanya...”"
+      }
+    ];
+
+    let currentIndex = 0;
+    let ytPlayer = null;
+    let playerReady = false;
+
+    // Load Official YouTube IFrame Player API
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    function onYouTubeIframeAPIReady() {
+      ytPlayer = new YT.Player('yt-api-player', {
+        videoId: tracks[0].id,
+        playerVars: {
+          playsinline: 1,
+          rel: 0,
+          modestbranding: 1,
+          controls: 1,
+          enablejsapi: 1
+        },
+        events: {
+          onReady: onPlayerReady,
+          onError: onPlayerError
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      playerReady = true;
+      event.target.unMute();
+      event.target.setVolume(100);
+    }
+
+    function onPlayerError(event) {
+      // Fallback if YouTube returns Error 150 / 153 (e.g., opened via content:// or file://)
+      const wrapper = document.querySelector('.video-wrapper');
+      const currentTrack = tracks[currentIndex];
+      wrapper.innerHTML = `
+        <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;background:#110d17;">
+          <p style="color:#fde047;font-weight:700;margin-bottom:8px;">Sekatan Pemain Tempatan (Kod Ralat ${event.data})</p>
+          <p style="color:#cbd5e1;font-size:0.86rem;max-width:420px;margin-bottom:14px;">
+            Pelayar telefon menyekat video benam apabila dibuka terus daripada fail storan tempatan. Ketik butang di bawah untuk menonton dengan audio penuh di aplikasi YouTube.
+          </p>
+          <a href="https://youtu.be/${currentTrack.id}" target="_blank" rel="noopener noreferrer"
+             style="background:#dc2626;color:#fff;text-decoration:none;font-weight:700;padding:10px 18px;border-radius:10px;">
+            ▶ Tonton "${currentTrack.title}" di YouTube
+          </a>
+        </div>
+      `;
+    }
+
+    function unmuteAndPlay() {
+      if (ytPlayer && playerReady && typeof ytPlayer.unMute === 'function') {
+        ytPlayer.unMute();
+        ytPlayer.setVolume(100);
+        ytPlayer.playVideo();
+        showToast("Audio dihidupkan & video dimainkan!");
+      } else {
+        window.open("https://youtu.be/" + tracks[currentIndex].id, "_blank");
+      }
+    }
+
+    function renderPlaylist() {
+      const grid = document.getElementById("playlist-grid");
+      grid.innerHTML = tracks.map((track, idx) => `
+        <div class="track-card ${idx === currentIndex ? 'active' : ''}" onclick="selectTrack(${idx}, true)">
+          <div class="thumb-box">
+            <img src="https://img.youtube.com/vi/${track.id}/hqdefault.jpg" alt="${track.title}" loading="lazy" />
+            <span class="play-pill">${idx === currentIndex ? '▶ Sedang Dipilih' : '▶ Tonton'}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-num">${track.tag}</div>
+            <div class="card-title">${track.title}</div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function selectTrack(index, autoplay = false) {
+      currentIndex = index;
+      const track = tracks[index];
+
+      document.getElementById("track-tag").textContent = track.tag;
+      document.getElementById("track-title").textContent = track.title;
+      document.getElementById("track-note").textContent = track.note;
+      document.getElementById("track-lyrics").textContent = track.lyrics;
+      document.getElementById("direct-yt-link").href = `https://youtu.be/${track.id}`;
+
+      if (ytPlayer && playerReady && typeof ytPlayer.loadVideoById === 'function') {
+        ytPlayer.loadVideoById(track.id);
+        ytPlayer.unMute();
+        ytPlayer.setVolume(100);
+        if (autoplay) ytPlayer.playVideo();
+      } else {
+        const wrapper = document.querySelector('.video-wrapper');
+        wrapper.innerHTML = `<div id="yt-api-player"></div>`;
+        ytPlayer = new YT.Player('yt-api-player', {
+          videoId: track.id,
+          playerVars: { playsinline: 1, rel: 0, modestbranding: 1, controls: 1, autoplay: autoplay ? 1 : 0 },
+          events: { onReady: onPlayerReady, onError: onPlayerError }
+        });
+      }
+
+      renderPlaylist();
+
+      if (window.innerWidth < 768) {
+        document.getElementById("player-section").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function prevTrack() {
+      const nextIdx = (currentIndex - 1 + tracks.length) % tracks.length;
+      selectTrack(nextIdx, true);
+    }
+
+    function nextTrack() {
+      const nextIdx = (currentIndex + 1) % tracks.length;
+      selectTrack(nextIdx, true);
+    }
+
+    const anniversaryStart = new Date("2007-10-19T00:00:00+08:00").getTime();
+
+    function updateCounter() {
+      const now = Date.now();
+      const diff = Math.max(0, now - anniversaryStart);
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const totalMinutes = Math.floor(totalSeconds / 60);
+      const totalHours = Math.floor(totalMinutes / 60);
+      const totalDays = Math.floor(totalHours / 24);
+
+      const years = Math.floor(totalDays / 365.2425);
+      const remDays = Math.floor(totalDays - years * 365.2425);
+      const hours = totalHours % 24;
+      const minutes = totalMinutes % 60;
+      const seconds = totalSeconds % 60;
+
+      document.getElementById("years").textContent = years;
+      document.getElementById("days").textContent = remDays;
+      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
+    }
+
+    function triggerLoveShower() {
+      const container = document.getElementById("effects-container");
+      const symbols = ["💛", "🌹", "✨", "❤️", "💖"];
+
+      for (let i = 0; i < 28; i++) {
+        const el = document.createElement("span");
+        el.className = "floating-item";
+        el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        el.style.left = Math.random() * 96 + "vw";
+        el.style.animationDuration = (3 + Math.random() * 3) + "s";
+        el.style.animationDelay = (Math.random() * 0.8) + "s";
+        container.appendChild(el);
+        setTimeout(() => el.remove(), 6800);
+      }
+    }
+
+    function copyLoveMessage() {
+      const msg = "Selamat Ulang Tahun Perkahwinan ke-19 buat isteriku tercinta, Nor Affedah Binti Johary (19 Oktober 2007 – 2026). Terima kasih untuk setiap doa, kesetiaan, dan kasih sayang selama ini. Semoga cinta kita kekal hingga ke syurga. 💛🌹";
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(msg).then(() => showToast("Ucapan berjaya disalin!"));
+      } else {
+        showToast("Ucapan sedia dikongsi!");
+      }
+      triggerLoveShower();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2600);
+    }
+
+    renderPlaylist();
+    updateCounter();
+    setInterval(updateCounter, 1000);
+    setTimeout(triggerLoveShower, 700);
+  </script>
+</body>
+</html>
